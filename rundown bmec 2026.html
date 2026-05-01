@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline BMEC 2026</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-color-light: #f8fafc;
+            --text-color-light: #1e293b;
+            --card-bg-light: #ffffff;
+            --border-light: #e2e8f0;
+            --sidebar-bg-light: #ffffff;
+            
+            /* Dark Theme Variables (Default) */
+            --bg-color-dark: #0B1120;
+            --text-color-dark: #f8fafc;
+            --card-bg-dark: #1e293b;
+            --border-dark: #334155;
+            --sidebar-bg-dark: #0F172A; /* Primary Navy Blue */
+
+            /* Global Colors */
+            --primary: #0F172A;
+            --accent: #F59E0B; /* Gold */
+            --accent-hover: #D97706;
+            
+            /* Category Colors */
+            --cat-internal: #3B82F6; /* Blue */
+            --cat-registration: #22C55E; /* Green */
+            --cat-submission: #10B981; /* Emerald */
+            --cat-competition: #EF4444; /* Red */
+            --cat-event: #F97316; /* Orange */
+            --cat-admin: #6B7280; /* Gray */
+        }
+
+        [data-theme="light"] {
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border: var(--border-light);
+            --sidebar-bg: var(--sidebar-bg-light);
+            --primary-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border: var(--border-dark);
+            --sidebar-bg: var(--sidebar-bg-dark);
+            --primary-bg: var(--primary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--primary-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-brand h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .nav-brand span {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: #fff;
+        }
+
+        .btn-accent:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--card-bg);
+        }
+
+        .theme-toggle {
+            background: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 300px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .widget {
+            background-color: var(--sidebar-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .widget h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+        }
+
+        /* Countdown */
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+        
+        .cd-box {
+            background-color: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .cd-box span {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .cd-box small {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+        }
+
+        /* Progress Tracker */
+        .progress-bar-bg {
+            background-color: var(--card-bg);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--accent);
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Month Filter */
+        .filter-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            justify-content: space-between;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--card-bg);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Mini Calendar */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .cal-day-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .cal-day {
+            padding: 0.3rem;
+            border-radius: 4px;
+        }
+
+        .cal-day.has-event {
+            background-color: var(--accent);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            flex-grow: 1;
+            min-width: 0; /* Fix flexbox overflow */
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--sidebar-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: gray;
+        }
+
+        .highlight-alert {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 0.8rem 1rem;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border);
+        }
+
+        .month-indicator {
+            position: sticky;
+            top: 80px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            margin-left: -3rem;
+            margin-bottom: 1.5rem;
+            z-index: 10;
+            border: 2px solid var(--border);
+        }
+
+        [data-theme="light"] .month-indicator {
+            background-color: var(--bg-color-light);
+            color: var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.35rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            border: 3px solid var(--bg-color);
+            z-index: 2;
+        }
+
+        .event-card {
+            background-color: var(--sidebar-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .event-date {
+            font-size: 0.85rem;
+            color: gray;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: white;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .status-upcoming { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .status-ongoing { background: rgba(245, 158, 11, 0.2); color: #F59E0B; animation: pulse 2s infinite; }
+        .status-completed { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .event-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, margin-top 0.3s ease-out;
+            color: gray;
+            font-size: 0.9rem;
+        }
+
+        .event-card.expanded .event-details {
+            max-height: 100px;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .expand-icon {
+            transition: transform 0.3s;
+        }
+
+        .event-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard { flex-direction: column; }
+            aside { width: 100%; }
+            .top-bar { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">
+            <h1>Timeline BMEC 2026</h1>
+            <span>Administrative Schedule & Event Timeline</span>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-outline" onclick="exportImage()"><i class="fas fa-image"></i> PNG</button>
+            <button class="btn-accent" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon" id="theme-icon"></i></button>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <aside>
+            <div class="widget" data-aos="fade-right">
+                <h3><i class="fas fa-hourglass-half"></i> Countdown Final</h3>
+                <div class="countdown-grid" id="countdown">
+                    <div class="cd-box"><span id="cd-days">00</span><small>Hari</small></div>
+                    <div class="cd-box"><span id="cd-hours">00</span><small>Jam</small></div>
+                    <div class="cd-box"><span id="cd-mins">00</span><small>Menit</small></div>
+                    <div class="cd-box"><span id="cd-secs">00</span><small>Detik</small></div>
+                </div>
+            </div>
+
+            <div class="widget" data-aos="fade-right" data-aos-delay="100">
+                <h3><i class="fas fa-chart-line"></i> Overall Progress</h3>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-status">0/0 Completed</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+            </div>
+
+            <div class="widget" data-aos="fade-right" data-aos-delay="200">
+                <h3><i class="fas fa-filter"></i> Filter Bulan</h3>
+                <ul class="filter-list" id="month-filters">
+                    <li><button class="filter-btn active" onclick="filterMonth('All')">Semua Bulan <span><i class="fas fa-chevron-right"></i></span></button></li>
+                    <!-- Filter buttons generated via JS -->
+                </ul>
+            </div>
+
+            <div class="widget" data-aos="fade-right" data-aos-delay="300">
+                <h3><i class="far fa-calendar-alt"></i> <span id="cal-month-name">Bulan Ini</span></h3>
+                <div class="calendar-grid" id="mini-calendar">
+                    <div class="cal-day-header">M</div><div class="cal-day-header">S</div><div class="cal-day-header">S</div>
+                    <div class="cal-day-header">R</div><div class="cal-day-header">K</div><div class="cal-day-header">J</div>
+                    <div class="cal-day-header">S</div>
+                    <!-- Calendar days generated via JS -->
+                </div>
+            </div>
+        </aside>
+
+        <main id="main-content">
+            <div class="top-bar" data-aos="fade-down">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Cari event, kategori, atau tanggal..." oninput="searchEvents()">
+                </div>
+                <div class="highlight-alert" id="nearest-event">
+                    <i class="fas fa-bell"></i>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--accent); font-weight: bold;">EVENT TERDEKAT</div>
+                        <div id="nearest-event-text" style="font-weight: 600; font-size: 0.9rem;">Memuat...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-container" id="timeline-container">
+                <!-- Timeline items generated via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Data Timeline BMEC 2026
+        const eventsData = [
+            { id: 1, month: "April", displayDate: "2 April 2026", start: "2026-04-02", end: "2026-04-02", title: "Welcome Party + TOC", category: "Event/Preparation" },
+            { id: 2, month: "Mei", displayDate: "8 Mei 2026", start: "2026-05-08", end: "2026-05-08", title: "Rapat Internal Divisi", category: "Internal Meeting" },
+            { id: 3, month: "Mei", displayDate: "12 Mei 2026", start: "2026-05-12", end: "2026-05-12", title: "Rapat Besar 1", category: "Internal Meeting" },
+            { id: 4, month: "Mei", displayDate: "18 Mei 2026 - 20 Mei 2026", start: "2026-05-18", end: "2026-05-20", title: "Persiapan Roadshow", category: "Event/Preparation" },
+            { id: 5, month: "Mei", displayDate: "21 Mei 2026", start: "2026-05-21", end: "2026-05-21", title: "Roadshow BMEC 2026", category: "Event/Preparation" },
+            { id: 6, month: "Mei", displayDate: "22 Mei 2026", start: "2026-05-22", end: "2026-05-22", title: "Rapat Divisi Internal", category: "Internal Meeting" },
+            { id: 7, month: "Mei", displayDate: "25 Mei 2026 - 23 Juni 2026", start: "2026-05-25", end: "2026-06-23", title: "Open Registrasi Olimpiade & Infografis Batch 1 + Open Submission Abstrak LKTI", category: "Registration" },
+            { id: 8, month: "Juni", displayDate: "24 Juni 2026", start: "2026-06-24", end: "2026-06-24", title: "Close Registrasi Batch 1", category: "Registration" },
+            { id: 9, month: "Juni", displayDate: "25 Juni 2026 - 7 Juli 2026", start: "2026-06-25", end: "2026-07-07", title: "Extend Abstrak LKTI + Memindahkan Abstrak ke Drive", category: "Submission" },
+            { id: 10, month: "Juli", displayDate: "8 Juli 2026", start: "2026-07-08", end: "2026-07-08", title: "Close Extend Abstrak LKTI", category: "Submission" },
+            { id: 11, month: "Juli", displayDate: "11 Juli 2026", start: "2026-07-11", end: "2026-07-11", title: "Rapat Besar 2", category: "Internal Meeting" },
+            { id: 12, month: "Juli", displayDate: "15 Juli 2026", start: "2026-07-15", end: "2026-07-15", title: "Announce Lolos Abstrak", category: "Submission" },
+            { id: 13, month: "Juli", displayDate: "16 Juli 2026 - 30 Juli 2026", start: "2026-07-16", end: "2026-07-30", title: "LKTI Full Paper Submission Batch 1", category: "Submission" },
+            { id: 14, month: "Juli", displayDate: "1 Juli 2026 - 30 Juli 2026", start: "2026-07-01", end: "2026-07-30", title: "Open Registrasi Olimpiade & Infografis Batch 2", category: "Registration" },
+            { id: 15, month: "Juli", displayDate: "31 Juli 2026", start: "2026-07-31", end: "2026-07-31", title: "Close Registrasi Olimpiade & Infografis Batch 2 + Close Full Paper Batch 1", category: "Registration" },
+            { id: 16, month: "Agustus", displayDate: "1 Agustus 2026", start: "2026-08-01", end: "2026-08-01", title: "Tryout 1", category: "Competition" },
+            { id: 17, month: "Agustus", displayDate: "3 Agustus 2026 - 3 September 2026", start: "2026-08-03", end: "2026-09-03", title: "Open Reg Olimpiade & Infografis Batch 3 + LKTI Full Paper Sub Batch 2", category: "Registration" },
+            { id: 18, month: "September", displayDate: "4 September 2026", start: "2026-09-04", end: "2026-09-04", title: "Close Registrasi Batch 3 + Close Full Paper Batch 2", category: "Registration" },
+            { id: 19, month: "September", displayDate: "5 September 2026 - 17 September 2026", start: "2026-09-05", end: "2026-09-17", title: "Extend Full Paper LKTI Submission Batch 2", category: "Submission" },
+            { id: 20, month: "September", displayDate: "6 September 2026", start: "2026-09-06", end: "2026-09-06", title: "Tryout 2", category: "Competition" },
+            { id: 21, month: "September", displayDate: "12 September 2026", start: "2026-09-12", end: "2026-09-12", title: "Penyisihan Olimpiade", category: "Competition" },
+            { id: 22, month: "September", displayDate: "18 September 2026", start: "2026-09-18", end: "2026-09-18", title: "Close Full Paper Batch 2", category: "Submission" },
+            { id: 23, month: "September", displayDate: "19 September 2026", start: "2026-09-19", end: "2026-09-19", title: "Rapat Besar 3", category: "Internal Meeting" },
+            { id: 24, month: "Oktober", displayDate: "17 Oktober 2026", start: "2026-10-17", end: "2026-10-17", title: "Webinar dan Pengumuman", category: "Event/Preparation" },
+            { id: 25, month: "Oktober", displayDate: "24 Oktober 2026", start: "2026-10-24", end: "2026-10-24", title: "Technical Meeting Semifinal & Final", category: "Technical/Admin" },
+            { id: 26, month: "Oktober", displayDate: "31 Oktober 2026", start: "2026-10-31", end: "2026-10-31", title: "Gladi Kotor", category: "Technical/Admin" },
+            { id: 27, month: "November", displayDate: "6 November 2026", start: "2026-11-06", end: "2026-11-06", title: "Gladi Bersih", category: "Technical/Admin" },
+            { id: 28, month: "November", displayDate: "7 November 2026", start: "2026-11-07", end: "2026-11-07", title: "Semifinal", category: "Competition" },
+            { id: 29, month: "November", displayDate: "8 November 2026", start: "2026-11-08", end: "2026-11-08", title: "Final", category: "Competition" }
+        ];
+
+        const categoryConfig = {
+            "Internal Meeting": { color: "var(--cat-internal)", icon: "fas fa-users" },
+            "Registration": { color: "var(--cat-registration)", icon: "fas fa-user-plus" },
+            "Submission": { color: "var(--cat-submission)", icon: "fas fa-file-upload" },
+            "Competition": { color: "var(--cat-competition)", icon: "fas fa-trophy" },
+            "Event/Preparation": { color: "var(--cat-event)", icon: "fas fa-calendar-check" },
+            "Technical/Admin": { color: "var(--cat-admin)", icon: "fas fa-cogs" }
+        };
+
+        const currentDate = new Date(); // Automatically uses user's current date logic
+        let activeFilter = 'All';
+        let searchQuery = '';
+
+        // Initialize App
+        function init() {
+            AOS.init({ duration: 800, once: true });
+            generateMonthFilters();
+            renderTimeline();
+            updateProgress();
+            startCountdown();
+            generateMiniCalendar();
+        }
+
+        // Logic Status
+        function getEventStatus(startStr, endStr) {
+            const start = new Date(startStr);
+            const end = new Date(endStr);
+            end.setHours(23, 59, 59); // End of the day
+
+            if (currentDate > end) return { label: "Completed", class: "status-completed" };
+            if (currentDate >= start && currentDate <= end) return { label: "Ongoing", class: "status-ongoing" };
+            return { label: "Upcoming", class: "status-upcoming" };
+        }
+
+        // Render Timeline
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+            
+            let currentMonth = '';
+            let nearestEvent = null;
+            let minDiff = Infinity;
+
+            const filteredEvents = eventsData.filter(ev => {
+                const matchMonth = activeFilter === 'All' || ev.month === activeFilter;
+                const matchSearch = ev.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                    ev.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchMonth && matchSearch;
+            });
+
+            filteredEvents.forEach((ev, index) => {
+                const status = getEventStatus(ev.start, ev.end);
+                const conf = categoryConfig[ev.category];
+
+                // Nearest event logic
+                const startDate = new Date(ev.start);
+                if (startDate >= currentDate && (startDate - currentDate) < minDiff) {
+                    minDiff = startDate - currentDate;
+                    nearestEvent = ev;
+                }
+
+                // Month Indicator Header
+                if (ev.month !== currentMonth) {
+                    const monthBadge = document.createElement('div');
+                    monthBadge.className = 'month-indicator';
+                    monthBadge.innerHTML = `<i class="far fa-calendar"></i> ${ev.month.toUpperCase()} 2026`;
+                    monthBadge.setAttribute('data-aos', 'fade-right');
+                    container.appendChild(monthBadge);
+                    currentMonth = ev.month;
+                }
+
+                // Event Item
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.setAttribute('data-aos', 'fade-up');
+                
+                item.innerHTML = `
+                    <div class="timeline-dot" style="background-color: ${conf.color}"></div>
+                    <div class="event-card" onclick="this.classList.toggle('expanded')">
+                        <div class="event-header">
+                            <div>
+                                <div class="event-date"><i class="far fa-clock"></i> ${ev.displayDate}</div>
+                                <div class="event-title">${ev.title}</div>
+                                <div class="event-badges">
+                                    <span class="badge" style="background-color: ${conf.color}">
+                                        <i class="${conf.icon}"></i> ${ev.category}
+                                    </span>
+                                    <span class="status-badge ${status.class}">${status.label}</span>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon" style="color: gray"></i>
+                        </div>
+                        <div class="event-details">
+                            <strong>Detail Timeline:</strong><br>
+                            Start: ${ev.start}<br>
+                            End: ${ev.end}<br>
+                            Status: ${status.label} as of today.
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            // Update Highlight alert
+            const alertBox = document.getElementById('nearest-event-text');
+            if (nearestEvent) {
+                alertBox.innerHTML = `${nearestEvent.title} (${nearestEvent.displayDate})`;
+            } else {
+                alertBox.innerHTML = "Tidak ada event terdekat.";
+            }
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            eventsData.forEach(ev => {
+                const end = new Date(ev.end);
+                end.setHours(23, 59, 59);
+                if (currentDate > end) completed++;
+            });
+            const percent = Math.round((completed / eventsData.length) * 100);
+            
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-status').innerText = `${completed}/${eventsData.length} Completed`;
+            document.getElementById('progress-percent').innerText = `${percent}%`;
+        }
+
+        // Filters & Search
+        function generateMonthFilters() {
+            const months = [...new Set(eventsData.map(ev => ev.month))];
+            const ul = document.getElementById('month-filters');
+            months.forEach(m => {
+                const li = document.createElement('li');
+                li.innerHTML = `<button class="filter-btn" onclick="filterMonth('${m}', this)">${m} 2026 <span><i class="fas fa-chevron-right"></i></span></button>`;
+                ul.appendChild(li);
+            });
+        }
+
+        function filterMonth(month, btnElement = null) {
+            activeFilter = month;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btnElement) {
+                btnElement.classList.add('active');
+            } else {
+                document.querySelector('.filter-btn').classList.add('active');
+            }
+            renderTimeline();
+        }
+
+        function searchEvents() {
+            searchQuery = document.getElementById('search-input').value;
+            renderTimeline();
+        }
+
+        // Countdown Logic (Target: 8 Nov 2026)
+        function startCountdown() {
+            const targetDate = new Date("2026-11-08T00:00:00").getTime();
+            
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) return;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-days').innerText = days.toString().padStart(2, '0');
+                document.getElementById('cd-hours').innerText = hours.toString().padStart(2, '0');
+                document.getElementById('cd-mins').innerText = minutes.toString().padStart(2, '0');
+                document.getElementById('cd-secs').innerText = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // Mini Calendar (Current Month visual representation)
+        function generateMiniCalendar() {
+            const calGrid = document.getElementById('mini-calendar');
+            const monthName = currentDate.toLocaleString('id-ID', { month: 'long', year: 'numeric' });
+            document.getElementById('cal-month-name').innerText = monthName;
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Adjust for Sunday start (0 = Sun, 1 = Mon ... JS standard)
+            // We printed: M S S R K J S (Minggu, Senin, Selasa...)
+            
+            for(let i = 0; i < firstDay; i++) {
+                calGrid.innerHTML += `<div></div>`; // Empty slots
+            }
+
+            for(let i = 1; i <= daysInMonth; i++) {
+                const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // Check if event exists on this day
+                const hasEvent = eventsData.some(ev => ev.start <= dateStr && ev.end >= dateStr);
+                const activeClass = hasEvent ? 'has-event' : '';
+                
+                calGrid.innerHTML += `<div class="cal-day ${activeClass}" title="${hasEvent ? 'Ada Event!' : ''}">${i}</div>`;
+            }
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // Export Functions
+        function exportPDF() {
+            const element = document.getElementById('main-content');
+            const opt = {
+                margin:       1,
+                filename:     'Timeline-BMEC-2026.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportImage() {
+            html2canvas(document.getElementById('main-content'), { scale: 2, backgroundColor: getComputedStyle(document.body).backgroundColor }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Timeline-BMEC-2026.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Run Init
+        window.onload = init;
+    </script>
+</body>
+</html>
